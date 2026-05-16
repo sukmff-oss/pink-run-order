@@ -277,26 +277,10 @@
 
   <!-- 顧客資料 -->
   <div class="customer-section">
-    <div class="section-title">👤 訂購人資料</div>
+    <div class="section-title">📞 訂購人電話（必填）</div>
     <div class="input-row">
-      <div class="input-group">
-        <span class="input-label">姓名</span>
-        <input class="input-field" type="text" id="nameInput" placeholder="請輸入姓名" maxlength="20">
-      </div>
-      <div class="input-group">
-        <span class="input-label">電話</span>
+      <div class="input-group" style="flex:1">
         <input class="input-field" type="tel" id="phoneInput" placeholder="09xx-xxx-xxx" maxlength="15">
-      </div>
-    </div>
-
-    <!-- 外送地區 -->
-    <div class="location-section">
-      <div class="location-title">📍 選擇外送地區（必填）</div>
-      <div class="location-grid">
-        <button class="location-btn" onclick="selectLocation('蘆竹區', this)">1️⃣ 蘆竹區</button>
-        <button class="location-btn" onclick="selectLocation('大園區', this)">2️⃣ 大園區</button>
-        <button class="location-btn" onclick="selectLocation('大湳區', this)">3️⃣ 大湳區</button>
-        <button class="location-btn" onclick="selectLocation('中壢區', this)">4️⃣ 中壢區</button>
       </div>
     </div>
   </div>
@@ -414,20 +398,12 @@
     const checkoutBtn   = document.getElementById('checkoutBtn');
     const toast         = document.getElementById('toast');
     const categoryTabs  = document.querySelectorAll('.category-tab');
-    const nameInput     = document.getElementById('nameInput');
     const phoneInput    = document.getElementById('phoneInput');
 
     function showToast(msg, type = '') {
       toast.textContent = msg;
       toast.className = 'toast show' + (type ? ' ' + type : '');
       setTimeout(() => toast.classList.remove('show'), 2500);
-    }
-
-    function selectLocation(loc, btn) {
-      selectedLocation = loc;
-      document.querySelectorAll('.location-btn').forEach(b => b.classList.remove('selected'));
-      btn.classList.add('selected');
-      updateCheckoutBtn();
     }
 
     function renderMenu() {
@@ -487,7 +463,7 @@
 
     function updateCheckoutBtn() {
       const hasItems = Object.keys(cart).length > 0;
-      const hasCustomer = nameInput.value.trim().length > 0 && phoneInput.value.trim().length > 0;
+      const hasCustomer = phoneInput.value.trim().length > 0;
       const hasLocation = selectedLocation !== '';
       const hasLiffId = !!liffUserId; // 有LINE ID會推顧客確認，沒有也能點餐
       checkoutBtn.disabled = !(hasItems && hasCustomer && hasLocation);
@@ -512,16 +488,7 @@
       if (isSubmitting) return;
 
       // 驗證（直接檢查，不等 LIFF）
-      const name = nameInput.value.trim();
       const phone = phoneInput.value.trim();
-
-      if (!name) {
-        nameInput.classList.add('error');
-        showToast('請填寫姓名', 'error');
-        nameInput.focus();
-        return;
-      }
-      nameInput.classList.remove('error');
 
       if (!phone) {
         phoneInput.classList.add('error');
@@ -549,7 +516,6 @@
 
       const total = orderItems.reduce((sum, i) => sum + i.price * i.qty, 0);
       const orderData = {
-        name: name,
         phone: phone,
         items: orderItems,
         total: total,
