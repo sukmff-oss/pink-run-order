@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🍳 廚房面板 - 粉紅超跑點餐</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Microsoft JhengHei', sans-serif;
+      background: #1a1a2e;
+      color: #fff;
+      min-height: 100vh;
+      padding: 16px;
+    }
+    h1 {
+      text-align: center;
+      font-size: 24px;
+      margin-bottom: 16px;
+      color: #ff6b9d;
+    }
+    .header-info {
+      text-align: center;
+      font-size: 13px;
+      color: #888;
+      margin-bottom: 20px;
+    }
+    .refresh-btn {
+      display: block;
+      width: 100%;
+      max-width: 300px;
+      margin: 0 auto 20px;
+      padding: 14px;
+      background: #ff6b9d;
+      color: #fff;
+      border: none;
+      border-radius: 12px;
+      font-size: 18px;
+      cursor: pointer;
+    }
+    .refresh-btn:active { background: #e05588; }
+    .orders-container { max-width: 600px; margin: 0 auto; }
+    .order-card {
+      background: #16213e;
+      border-radius: 12px;
+      padding: 16px;
+      margin-bottom: 14px;
+      border-left: 4px solid #ff6b9d;
+    }
+    .order-card.waiting { border-left-color: #ffd93d; }
+    .order-card.making { border-left-color: #6bcb77; }
+    .order-card.done { border-left-color: #4d96ff; }
+    .order-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+    .order-id {
+      font-size: 13px;
+      color: #aaa;
+      font-family: monospace;
+    }
+    .order-time {
+      font-size: 12px;
+      color: #666;
+    }
+    .order-phone {
+      font-size: 20px;
+      font-weight: bold;
+      color: #fff;
+    }
+    .order-location {
+      font-size: 13px;
+      color: #ffd93d;
+      margin-bottom: 8px;
+    }
+    .order-items {
+      background: #0f3460;
+      border-radius: 8px;
+      padding: 10px 14px;
+      margin-bottom: 12px;
+      font-size: 15px;
+      line-height: 1.8;
+    }
+    .order-status {
+      display: inline-block;
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: bold;
+    }
+    .status-pending { background: #ffd93d; color: #333; }
+    .status-making { background: #6bcb77; color: #fff; }
+    .status-done { background: #4d96ff; color: #fff; }
+    .action-btns {
+      display: flex;
+      gap: 8px;
+      margin-top: 12px;
+    }
+    .action-btn {
+      flex: 1;
+      padding: 12px;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    .btn-start {
+      background: #6bcb77;
+      color: #fff;
+    }
+    .btn-start:active { background: #5ab568; }
+    .btn-done {
+      background: #4d96ff;
+      color: #fff;
+    }
+    .btn-done:active { background: #3d7acc; }
+    .empty {
+      text-align: center;
+      color: #555;
+      padding: 40px;
+      font-size: 16px;
+    }
+    .toast {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #333;
+      color: #fff;
+      padding: 12px 24px;
+      border-radius: 8px;
+      font-size: 14px;
+      z-index: 999;
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+    .toast.show { opacity: 1; }
+    .toast.success { background: #6bcb77; }
+    .toast.error { background: #e74c3c; }
+    .loading {
+      text-align: center;
+      color: #888;
+      padding: 20px;
+    }
+  </style>
+</head>
+<body>
+  <h1>🍳 廚房面板</h1>
+  <div class="header-info">粉紅超跑點餐系統</div>
+
+  <button class="refresh-btn" onclick="loadOrders()">🔄 刷新訂單</button>
+
+  <div id="orders" class="orders-container">
+    <div class="loading">載入中...</div>
+  </div>
+
+  <div id="toast" class="toast"></div>
+
+  <script>
+    const API_BASE = 'https://script.google.com/macros/s/AKfycbwdO5rn-Tu0OEX2JiiLuQR2tzQRFTmtzsjkGJzS9B4tHMHivAEbcEYWuo-awvLjKJ-e/exec';
+
+    function showToast(msg, type='info') {
+      const t = document.getElementById('toast');
+      t.textContent = msg;
+      t.className = 'toast show ' + type;
+      setTimeout(() => t.className = 'toast', 2500);
+    }
+
+    async function loadOrders() {
+      const el = document.getElementById('orders');
+      el.innerHTML = '<div class="loading">載入中...</div>';
+      try {
+        const controller = new AbortController();
+        const tid = setTimeout(() => controller.abort(), 10000);
+        const res = await fetch(API_BASE + '?action=kitchenOrders', {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({}),
+          signal: controller.signal
+        });
+        clearTimeout(tid);
+        const json = await res.json();
+        renderOrders(json.orders || []);
+      } catch (err) {
+        el.innerHTML = '<div class="empty">❌ 連線失敗，請稍後重試</div>';
+        showToast('連線失敗', 'error');
+      }
+    }
+
+    function renderOrders(orders) {
+      const el = document.getElementById('orders');
+      if (!orders.length) {
+        el.innerHTML = '<div class="empty">🎉 目前沒有待製作的訂單</div>';
+        return;
+      }
+      el.innerHTML = orders.map(o => {
+        const statusMap = {
+          'pending': '<span class="order-status status-pending">⏳ 待製作</span>',
+          'making': '<span class="order-status status-making">👨‍🍳 製作中</span>',
+          'done': '<span class="order-status status-done">✅ 完成</span>'
+        };
+        const itemList = o.品項 ? o.品項 : (o.items || '');
+        const time = o.時間 ? new Date(o.時間).toLocaleString('zh-TW', {hour:'2-digit',minute:'2-digit'}) : '';
+
+        return `
+        <div class="order-card ${o.狀態 || 'pending'}">
+          <div class="order-header">
+            <span class="order-id">#${o.order_id}</span>
+            <span class="order-time">${time}</span>
+          </div>
+          <div class="order-phone">📞 ${o.電話 || '-'}</div>
+          ${o.留言 ? '<div class="order-location">📍 ' + o.留言 + '</div>' : ''}
+          <div class="order-items">${itemList}</div>
+          ${statusMap[o.狀態] || statusMap['pending']}
+          <div class="action-btns">
+            ${o.狀態 !== 'making' && o.狀態 !== 'done' ? `<button class="action-btn btn-start" onclick="updateStatus('${o.order_id}', 'making')">▶ 開始製作</button>` : ''}
+            ${o.狀態 === 'making' ? `<button class="action-btn btn-done" onclick="updateStatus('${o.order_id}', 'done')">✅ 完成</button>` : ''}
+          </div>
+        </div>`;
+      }).join('');
+    }
+
+    async function updateStatus(orderId, status) {
+      try {
+        const controller = new AbortController();
+        const tid = setTimeout(() => controller.abort(), 10000);
+        const res = await fetch(API_BASE, {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({ orderId: orderId, status: status }),
+          signal: controller.signal
+        });
+        clearTimeout(tid);
+        const json = await res.json();
+        if (json.success) {
+          showToast(status === 'making' ? '👨‍🍳 已開始製作' : '✅ 已完成', 'success');
+          loadOrders();
+        } else {
+          showToast('更新失敗', 'error');
+        }
+      } catch (err) {
+        showToast('更新失敗', 'error');
+      }
+    }
+
+    loadOrders();
+    setInterval(loadOrders, 30000);
+  </script>
+</body>
+</html>
