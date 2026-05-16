@@ -175,10 +175,9 @@
       try {
         const controller = new AbortController();
         const tid = setTimeout(() => controller.abort(), 10000);
-        const res = await fetch(API_BASE + '?action=kitchenOrders', {
-          method: 'POST',
-          headers: {'Content-Type': 'application/json'},
-          body: JSON.stringify({}),
+        // 用 GET 拿廚房訂單（避免 CORS preflight 複雜度）
+        const res = await fetch(API_BASE + '?panel=1', {
+          method: 'GET',
           signal: controller.signal
         });
         clearTimeout(tid);
@@ -227,10 +226,9 @@
       try {
         const controller = new AbortController();
         const tid = setTimeout(() => controller.abort(), 10000);
-        const res = await fetch(API_BASE, {
-          method: 'POST',
-          headers: {'Content-Type': 'application/json'},
-          body: JSON.stringify({ orderId: orderId, status: status }),
+        // 用 GET + query string 避免 CORS preflight
+        const res = await fetch(API_BASE + '?action=kitchenUpdate&orderId=' + encodeURIComponent(orderId) + '&status=' + encodeURIComponent(status), {
+          method: 'GET',
           signal: controller.signal
         });
         clearTimeout(tid);
