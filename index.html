@@ -388,7 +388,6 @@
 
     const cart = {};
     let currentCategory = 'all';
-    let selectedLocation = '';
     let isSubmitting = false;
 
     // DOM
@@ -464,9 +463,8 @@
     function updateCheckoutBtn() {
       const hasItems = Object.keys(cart).length > 0;
       const hasCustomer = phoneInput.value.trim().length > 0;
-      const hasLocation = selectedLocation !== '';
       const hasLiffId = !!liffUserId; // 有LINE ID會推顧客確認，沒有也能點餐
-      checkoutBtn.disabled = !(hasItems && hasCustomer && hasLocation);
+      checkoutBtn.disabled = !(hasItems && hasCustomer);
 
       if (!hasLiffId && !checkoutBtn.disabled) {
         checkoutBtn.textContent = '⚠️ 送出（無LINE通知）';
@@ -498,11 +496,6 @@
       }
       phoneInput.classList.remove('error');
 
-      if (!selectedLocation) {
-        showToast('請選擇外送地區', 'error');
-        return;
-      }
-
       if (Object.keys(cart).length === 0) {
         showToast('請先選擇餐點', 'error');
         return;
@@ -519,9 +512,7 @@
         phone: phone,
         items: orderItems,
         total: total,
-        location: selectedLocation,
-        time: new Date().toLocaleString('zh-TW'),
-        line_user_id: liffUserId  // 綁定 LINE 用戶
+        time: new Date().toLocaleString('zh-TW')
       };
 
       // 顯示 loading
@@ -546,10 +537,7 @@
           Object.keys(cart).forEach(k => delete cart[k]);
           updateCart();
           renderMenu();
-          nameInput.value = '';
           phoneInput.value = '';
-          selectedLocation = '';
-          document.querySelectorAll('.location-btn').forEach(b => b.classList.remove('selected'));
         } else {
           throw new Error('HTTP ' + res.status);
         }
@@ -568,7 +556,6 @@
     }
 
     // 監聽輸入即時更新送出按鈕
-    nameInput.addEventListener('input', updateCheckoutBtn);
     phoneInput.addEventListener('input', updateCheckoutBtn);
 
     // 類別切換
