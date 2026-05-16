@@ -175,6 +175,8 @@
       border-radius: 16px;
       overflow: hidden;
       box-shadow: 0 4px 20px rgba(255, 107, 157, 0.15);
+      touch-action: manipulation;
+      -webkit-touch-callout: none;
     }
     .card-image {
       width: 100%;
@@ -200,6 +202,9 @@
       color: white; font-size: 20px; font-weight: 700;
       cursor: pointer; display: flex; align-items: center; justify-content: center;
       transition: transform 0.2s; font-family: system-ui; line-height: 1;
+      touch-action: manipulation;
+      -webkit-touch-callout: none;
+      user-select: none;
     }
     .qty-btn:active { transform: scale(0.9); }
     .qty-btn.disabled { background: #ddd; cursor: not-allowed; }
@@ -428,9 +433,9 @@
             <div class="card-footer">
               <div class="card-price"><small>$</small>${item.price}</div>
               <div class="qty-control">
-                <button class="qty-btn ${qty === 0 ? 'disabled' : ''}" onclick="event.stopPropagation(); changeQty(${item.id}, -1)">−</button>
+                <button class="qty-btn ${qty === 0 ? 'disabled' : ''}" onclick="changeQty(${item.id}, -1)">−</button>
                 <span class="qty-num">${qty}</span>
-                <button class="qty-btn" onclick="event.stopPropagation(); changeQty(${item.id}, 1)">+</button>
+                <button class="qty-btn" onclick="changeQty(${item.id}, 1)">+</button>
               </div>
             </div>
           </div>
