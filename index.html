@@ -529,7 +529,7 @@
 
       try {
         const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), 10000); // 10秒超時
+        const timeoutId = setTimeout(() => controller.abort(), 10000);
         const res = await fetch(API_BASE, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -538,15 +538,31 @@
           signal: controller.signal
         });
         clearTimeout(timeoutId);
-        const json = await res.json();
-        if (json.success) {
-          showToast('✅ 訂單已送出！', 'success');
-          Object.keys(cart).forEach(k => delete cart[k]);
-          updateCart();
-          renderMenu();
-          phoneInput.value = '';
-        } else {
-          throw new Error(json.error || 'HTTP ' + res.status);
+        let success = false;
+        try {
+          const json = await res.json();
+          success = json.success;
+          if (success) {
+            showToast('✅ 訂單已送出！', 'success');
+            Object.keys(cart).forEach(k => delete cart[k]);
+            updateCart();
+            renderMenu();
+            phoneInput.value = '';
+          } else {
+            showToast('❌ ' + (json.error || '伺服器回應錯誤'), 'error');
+          }
+        } catch (_) {
+          // GAS redirect 後的頁面是 HTML，res.json() 會失敗
+          // 如果 HTTP 狀態正常，就當作成功（GAS 執行記錄已有訂單）
+          if (res.ok || res.status === 200 || res.status === 0) {
+            showToast('✅ 訂單已送出！', 'success');
+            Object.keys(cart).forEach(k => delete cart[k]);
+            updateCart();
+            renderMenu();
+            phoneInput.value = '';
+          } else {
+            showToast('❌ 發送失敗，請致電 09-09-09-2299', 'error');
+          }
         }
       } catch (err) {
         if (err.name === 'AbortError') {
