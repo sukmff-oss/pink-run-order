@@ -514,9 +514,11 @@
 
       const total = orderItems.reduce((sum, i) => sum + i.price * i.qty, 0);
       const orderData = {
+        action: 'order',         // 讓 GAS 認得出這是點餐 API
         phone: phone,
         items: orderItems,
         total: total,
+        line_user_id: liffUserId || '',
         time: new Date().toLocaleString('zh-TW')
       };
 
