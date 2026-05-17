@@ -530,39 +530,49 @@
       try {
         const controller = new AbortController();
         const timeoutId = setTimeout(() => controller.abort(), 10000);
+
+        // 先用 fetch 拿回原始 response（不自動 follow redirect）
         const res = await fetch(API_BASE, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(orderData),
-          redirect: 'follow',
+          redirect: 'manual',  // 手動處理 redirect，不自動 follow
           signal: controller.signal
         });
         clearTimeout(timeoutId);
-        let success = false;
-        try {
-          const json = await res.json();
-          success = json.success;
-          if (success) {
-            showToast('✅ 訂單已送出！', 'success');
-            Object.keys(cart).forEach(k => delete cart[k]);
-            updateCart();
-            renderMenu();
-            phoneInput.value = '';
-          } else {
-            showToast('❌ ' + (json.error || '伺服器回應錯誤'), 'error');
+
+        // GAS 會 302 redirect，手動取出 redirect URL
+        const redirectUrl = res.headers.get('location');
+        let orderSuccess = false;
+
+        if (redirectUrl) {
+          // 用 GET 拿 redirect URL 的內容（這樣就不會 405）
+          const redirectRes = await fetch(redirectUrl, {
+            method: 'GET',
+            signal: controller.signal
+          });
+          try {
+            const json = await redirectRes.json();
+            orderSuccess = json.success;
+            if (!orderSuccess) {
+              showToast('❌ ' + (json.error || '伺服器回應錯誤'), 'error');
+            }
+          } catch (_) {
+            // GET 失敗，但訂單可能在 GAS 已執行
+            // 以 HTTP 狀態判斷
+            orderSuccess = redirectRes.ok || redirectRes.status === 200;
           }
-        } catch (_) {
-          // GAS redirect 後的頁面是 HTML，res.json() 會失敗
-          // 如果 HTTP 狀態正常，就當作成功（GAS 執行記錄已有訂單）
-          if (res.ok || res.status === 200 || res.status === 0) {
-            showToast('✅ 訂單已送出！', 'success');
-            Object.keys(cart).forEach(k => delete cart[k]);
-            updateCart();
-            renderMenu();
-            phoneInput.value = '';
-          } else {
-            showToast('❌ 發送失敗，請致電 09-09-09-2299', 'error');
-          }
+        } else {
+          // 沒有 redirect（不應該發生），直接以原 response 判斷
+          orderSuccess = res.ok;
+        }
+
+        if (orderSuccess) {
+          showToast('✅ 訂單已送出！', 'success');
+          Object.keys(cart).forEach(k => delete cart[k]);
+          updateCart();
+          renderMenu();
+          phoneInput.value = '';
         }
       } catch (err) {
         if (err.name === 'AbortError') {
