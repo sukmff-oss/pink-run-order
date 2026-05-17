@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🍳 廚房面板 - 粉紅超跑點餐</title>
+  <style>
+    body { font-family: -apple-system, 'Microsoft JhengHei', sans-serif; background: #1a1a2e; color: #fff; min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+    .msg { text-align: center; padding: 40px; }
+    .msg h2 { color: #ff6b9d; margin-bottom: 16px; }
+    .msg p { color: #888; margin: 8px 0; }
+    .btn { display: inline-block; background: #ff6b9d; color: #fff; padding: 16px 32px; border-radius: 12px; font-size: 18px; font-weight: bold; text-decoration: none; margin-top: 20px; }
+    .btn:active { background: #e55a8a; }
+  </style>
+</head>
+<body>
+  <div class="msg">
+    <h2>🍳 廚房面板</h2>
+    <p>正在開啟廚房系統...</p>
+    <p id="tip" style="font-size:13px;color:#666"></p>
+    <a class="btn" id="link" href="">🔄 若未跳轉，請點這裡</a>
+  </div>
+  <script>
+    // 自動跳轉到 GAS 廚房面板（同一網域，無 CORS 問題）
+    var GAS_PANEL = 'https://script.google.com/macros/s/AKfycbwdO5rn-Tu0OEX2JiiLuQR2tzQRFTmtzsjkGJzS9B4tHMHivAEbcEYWuo-awvLjKJ-e/exec?panel=1';
+    var delay = 1500;
+    var t = document.getElementById('tip');
+    var n = delay / 1000;
+    var countdown = setInterval(function() {
+      n--;
+      if (n > 0) {
+        t.textContent = n + ' 秒後自動跳轉...';
+      } else {
+        clearInterval(countdown);
+      }
+    }, 1000);
+    setTimeout(function() {
+      window.location.href = GAS_PANEL;
+    }, delay);
+    document.getElementById('link').href = GAS_PANEL;
+  </script>
+</body>
+</html>
