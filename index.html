@@ -544,9 +544,9 @@
         // GAS 會 302 redirect，手動取出 redirect URL
         const redirectUrl = res.headers.get('location');
         let orderSuccess = false;
+        let errDetail = '';
 
         if (redirectUrl) {
-          // 用 GET 拿 redirect URL 的內容（這樣就不會 405）
           const redirectRes = await fetch(redirectUrl, {
             method: 'GET',
             signal: controller.signal
@@ -554,18 +554,19 @@
           try {
             const json = await redirectRes.json();
             orderSuccess = json.success;
+            errDetail = json.error || '';
             if (!orderSuccess) {
-              showToast('❌ ' + (json.error || '伺服器回應錯誤'), 'error');
+              showToast('❌ ' + (errDetail || 'GAS錯誤'), 'error');
             }
           } catch (_) {
-            // GET 失敗，但訂單可能在 GAS 已執行
-            // 以 HTTP 狀態判斷
+            errDetail = 'HTTP ' + redirectRes.status + ' ' + redirectRes.statusText;
             orderSuccess = redirectRes.ok || redirectRes.status === 200;
           }
         } else {
-          // 沒有 redirect（不應該發生），直接以原 response 判斷
+          errDetail = '無redirect：' + res.status;
           orderSuccess = res.ok;
         }
+        console.log('[ORDER] success=' + orderSuccess + ' err=' + errDetail);
 
         if (orderSuccess) {
           showToast('✅ 訂單已送出！', 'success');
