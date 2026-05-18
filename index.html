@@ -579,7 +579,11 @@
         console.log('[ORDER] success=' + orderSuccess + ' err=' + errDetail);
 
         if (orderSuccess) {
-          showToast('✅ 訂單已送出！', 'success');
+          let discountMsg = '';
+          if (json && json.discount > 0) {
+            discountMsg = '｜回頭客折抵 $' + json.discount;
+          }
+          showToast('✅ 訂單已送出！' + discountMsg, 'success');
           Object.keys(cart).forEach(k => delete cart[k]);
           updateCart();
           renderMenu();
