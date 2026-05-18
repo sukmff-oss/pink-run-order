@@ -83,6 +83,10 @@
       border-color: #ff6b9d;
     }
 
+    .input-field:invalid:not(:placeholder-shown) {
+      border-color: #ff4444;
+    }
+
     .input-field::placeholder { color: #ccc; }
 
     /* ===== 外送地區 ===== */
@@ -285,7 +289,7 @@
     <div class="section-title">📞 訂購人電話（必填）</div>
     <div class="input-row">
       <div class="input-group" style="flex:1">
-        <input class="input-field" type="tel" id="phoneInput" placeholder="09xx-xxx-xxx" maxlength="15">
+        <input class="input-field" type="tel" id="phoneInput" placeholder="09xx-xxx-xxx" pattern="[0-9]{10}" maxlength="10" required>
       </div>
     </div>
   </div>
@@ -496,6 +500,12 @@
       if (!phone) {
         phoneInput.classList.add('error');
         showToast('請填寫電話', 'error');
+        phoneInput.focus();
+        return;
+      }
+      if (!/^[0-9]{10}$/.test(phone)) {
+        phoneInput.classList.add('error');
+        showToast('電話需為10碼數字', 'error');
         phoneInput.focus();
         return;
       }
