@@ -326,23 +326,36 @@
   <!-- Toast -->
   <div class="toast" id="toast"></div>
 
-  <script src="https://d.line-scdn.net/liff/initialization.js"></script>
+  <script src="https://d.line-scdn.net/liff/initialization.js" defer></script>
   <script>
-    const API_BASE = 'https://pink-run-order-proxy.sukm-ff-1c6.workers.dev/order';
-    let liffUserId = ''; // LINE userId for order binding
-    let liffReadyPromise = null; // 用來確保 LIFF 初始化完成
+  // 全域錯誤保護（防止 LINE in-app browser 顯示 SDK 錯誤）
+window.addEventListener('error', function(e) {
+  if (e.message && (e.message.includes('jsen') || e.message.includes('liff') || e.message.includes('LineLIFF'))) {
+    e.preventDefault();
+    return true;
+  }
+});
+window.addEventListener('unhandledrejection', function(e) {
+  if (e.reason && e.reason.message && e.reason.message.includes('jsen')) {
+    e.preventDefault();
+  }
+});
 
-    // Initialize LINE LIFF 並等待完成（最長等15秒，避免永遠卡住）
-    let liffBindFailed = false; // 綁定失敗標記
-    let liffBindFailedToastShown = false; // 失敗toast只顯示一次
+const API_BASE = 'https://pink-run-order-proxy.sukm-ff-1c6.workers.dev/order';
+let liffUserId = ''; // LINE userId for order binding
+let liffReadyPromise = null; // 用來確保 LIFF 初始化完成
 
-    async function initLiff() {
-      try {
-        const initWithTimeout = Promise.race([
-          liff.init({ liffId: '2010079227-AYQrqZ5M' }),
-          new Promise((_, reject) => setTimeout(() => reject(new Error('init timeout')), 15000))
-        ]);
-        await initWithTimeout;
+// Initialize LINE LIFF 並等待完成（最長等15秒，避免永遠卡住）
+let liffBindFailed = false; // 綁定失敗標記
+let liffBindFailedToastShown = false; // 失敗toast只顯示一次
+
+async function initLiff() {
+  try {
+    const initWithTimeout = Promise.race([
+      liff.init({ liffId: '2010079227-AYQrqZ5M' }),
+      new Promise((_, reject) => setTimeout(() => reject(new Error('init timeout')), 15000))
+    ]);
+    await initWithTimeout;
         console.log('LIFF init OK');
 
         // 方式1：從 context 直接拿 userId（不需要額外API call）
