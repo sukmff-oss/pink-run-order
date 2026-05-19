@@ -568,13 +568,13 @@ async function initLiff() {
         const redirectUrl = res.headers.get('location');
         let orderSuccess = false;
         let errDetail = '';
+        let json = null;
 
         if (redirectUrl) {
           const redirectRes = await fetch(redirectUrl, {
             method: 'GET',
             signal: controller.signal
           });
-          let json = null;
           try {
             json = await redirectRes.json();
             orderSuccess = json.success;
