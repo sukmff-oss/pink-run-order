@@ -507,6 +507,11 @@ async function initLiff() {
     async function submitOrder() {
       if (isSubmitting) return;
 
+      // 等 LIFF 初始化完成再繼續（確保拿到 userId）
+      if (liffReadyPromise) {
+        try { await liffReadyPromise; } catch (_) {}
+      }
+
       // 驗證（直接檢查，不等 LIFF）
       const phone = phoneInput.value.trim();
 
