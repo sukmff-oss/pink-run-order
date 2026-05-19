@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>國研化工｜綠色低碳塗料解決方案</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700;900&display=swap');
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Noto Sans TC', 'PingFang TC', 'Microsoft JhengHei', sans-serif;
+      background: #f4f7f4;
+      color: #1a1a1a;
+      font-size: 16px;
+      line-height: 1.8;
+    }
+
+    /* ===== COVER ===== */
+    .cover {
+      background: linear-gradient(135deg, #1a4d2e 0%, #2d7a47 50%, #3da85c 100%);
+      color: white;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 60px 40px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .cover::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(ellipse at 30% 50%, rgba(255,255,255,0.06) 0%, transparent 60%);
+      pointer-events: none;
+    }
+
+    .cover-badge {
+      background: rgba(255,255,255,0.15);
+      border: 1px solid rgba(255,255,255,0.3);
+      border-radius: 50px;
+      padding: 8px 24px;
+      font-size: 13px;
+      letter-spacing: 3px;
+      color: rgba(255,255,255,0.9);
+      margin-bottom: 40px;
+      display: inline-block;
+    }
+
+    .cover h1 {
+      font-size: 52px;
+      font-weight: 900;
+      line-height: 1.3;
+      letter-spacing: 4px;
+      margin-bottom: 16px;
+      color: #ffffff;
+    }
+
+    .cover-sub {
+      font-size: 20px;
+      font-weight: 300;
+      color: rgba(255,255,255,0.85);
+      margin-bottom: 50px;
+      letter-spacing: 2px;
+    }
+
+    .cover-line {
+      width: 80px;
+      height: 3px;
+      background: rgba(255,255,255,0.5);
+      margin: 0 auto 50px;
+      border-radius: 2px;
+    }
+
+    .cover-tags {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .cover-tag, .flow-step span {
+      background: rgba(255,255,255,0.12);
+      border: 1px solid rgba(255,255,255,0.25);
+      border-radius: 8px;
+      padding: 10px 20px;
+      font-size: 14px;
+      font-family: 'Noto Color Emoji', 'Segoe UI Emoji', sans-serif;
+      color: rgba(255,255,255,0.9);
+      letter-spacing: 1px;
+    }
+
+    /* ===== PAGE ===== */
+    .page {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 80px 40px;
+    }
+
+    .page-title {
+      font-size: 32px;
+      font-weight: 700;
+      color: #1a4d2e;
+      margin-bottom: 8px;
+      letter-spacing: 1px;
+    }
+
+    .page-subtitle {
+      font-size: 16px;
+      color: #666;
+      margin-bottom: 40px;
+      padding-bottom: 16px;
+      border-bottom: 2px solid #e8f5e9;
+    }
+
+    .page-label {
+      display: inline-block;
+      background: #1a4d2e;
+      color: white;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      padding: 4px 12px;
+      border-radius: 4px;
+      margin-bottom: 16px;
+    }
+
+    /* ===== INTRO ===== */
+    .intro-box {
+      background: linear-gradient(135deg, #e8f5e9 0%, #f1f8f2 100%);
+      border-left: 5px solid #2d7a47;
+      border-radius: 0 12px 12px 0;
+      padding: 28px 32px;
+      margin-bottom: 50px;
+    }
+
+    .intro-box p {
+      font-size: 16px;
+      color: #2a2a2a;
+      line-height: 2;
+    }
+
+    /* ===== GRID ===== */
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      margin-bottom: 50px;
+    }
+
+    .card {
+      background: white;
+      border-radius: 16px;
+      padding: 28px 28px 24px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+      border: 1px solid #e8f5e9;
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+    .card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 32px rgba(45,122,71,0.12);
+    }
+
+    .card-icon {
+      font-size: 36px;
+      font-family: 'Noto Color Emoji', 'Segoe UI Emoji', sans-serif;
+      margin-bottom: 14px;
+    }
+
+    .card h3 {
+      font-size: 17px;
+      font-weight: 700;
+      color: #1a4d2e;
+      margin-bottom: 10px;
+    }
+
+    .card p {
+      font-size: 13.5px;
+      color: #555;
+      line-height: 1.8;
+    }
+
+    .card.green {
+      border-color: #c8e6c9;
+      background: linear-gradient(160deg, #f1f8f2, white);
+    }
+
+    .card.green h3 { color: #1a4d2e; }
+
+    /* ===== PRODUCT FLOW ===== */
+    .flow {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      margin: 50px 0;
+      flex-wrap: wrap;
+    }
+
+    .flow-step {
+      background: #1a4d2e;
+      color: white;
+      border-radius: 12px;
+      padding: 16px 20px;
+      text-align: center;
+      min-width: 130px;
+      font-size: 13px;
+      font-weight: 500;
+    }
+
+    .flow-step span {
+      display: block;
+      font-size: 24px;
+      margin-bottom: 4px;
+    }
+
+    .flow-arrow {
+      color: #2d7a47;
+      font-size: 22px;
+      font-weight: 300;
+    }
+
+    /* ===== STATS ===== */
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      margin: 50px 0;
+    }
+
+    .stat {
+      background: white;
+      border-radius: 16px;
+      padding: 24px 16px;
+      text-align: center;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.05);
+      border: 1px solid #e8f5e9;
+    }
+
+    .stat-num {
+      font-size: 36px;
+      font-weight: 900;
+      color: #1a4d2e;
+      line-height: 1;
+      margin-bottom: 8px;
+    }
+
+    .stat-label {
+      font-size: 12px;
+      color: #666;
+      letter-spacing: 0.5px;
+    }
+
+    /* ===== FEATURE LIST ===== */
+    .feature-list {
+      list-style: none;
+      margin: 24px 0;
+    }
+
+    .feature-list li {
+      padding: 14px 0;
+      border-bottom: 1px solid #e8f5e9;
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      font-size: 15px;
+    }
+
+    .feature-list li:last-child { border-bottom: none; }
+
+    .feature-check {
+      color: #2d7a47;
+      font-size: 18px;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    /* ===== APPLY SECTIONS ===== */
+    .apply-section {
+      background: white;
+      border-radius: 16px;
+      padding: 36px;
+      margin-bottom: 50px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+      border: 1px solid #e8f5e9;
+    }
+
+    .apply-section h3 {
+      font-size: 20px;
+      color: #1a4d2e;
+      margin-bottom: 20px;
+      padding-bottom: 12px;
+      border-bottom: 2px solid #c8e6c9;
+    }
+
+    .apply-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 16px;
+    }
+
+    .apply-tag {
+      background: linear-gradient(135deg, #e8f5e9, #f1f8f2);
+      border: 1px solid #c8e6c9;
+      border-radius: 20px;
+      padding: 6px 16px;
+      font-size: 13px;
+      color: #1a4d2e;
+      font-weight: 500;
+    }
+
+    /* ===== PARTNER SECTION ===== */
+    .partner-section {
+      background: linear-gradient(135deg, #1a4d2e, #2d7a47);
+      border-radius: 20px;
+      padding: 48px;
+      margin: 50px 0;
+      color: white;
+      text-align: center;
+    }
+
+    .partner-section h3 {
+      font-size: 24px;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .partner-section p {
+      font-size: 14px;
+      color: rgba(255,255,255,0.7);
+      margin-bottom: 30px;
+    }
+
+    .partner-logos {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+
+    .partner-logo {
+      background: rgba(255,255,255,0.12);
+      border: 1px solid rgba(255,255,255,0.2);
+      border-radius: 10px;
+      padding: 12px 24px;
+      font-size: 15px;
+      font-weight: 700;
+      color: white;
+      letter-spacing: 1px;
+    }
+
+    /* ===== CERT SECTION ===== */
+    .cert-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin: 24px 0;
+    }
+
+    .cert-item {
+      background: #f8faf8;
+      border: 1px solid #c8e6c9;
+      border-radius: 12px;
+      padding: 20px 16px;
+      text-align: center;
+      font-size: 13px;
+      color: #1a4d2e;
+      font-weight: 500;
+    }
+
+    .cert-item .cert-icon {
+      font-size: 28px;
+      margin-bottom: 8px;
+    }
+
+    /* ===== CLOSING ===== */
+    .closing {
+      background: linear-gradient(135deg, #e8f5e9, #f8faf8);
+      border-radius: 16px;
+      padding: 40px 48px;
+      text-align: center;
+      margin: 50px 0;
+      border: 1px solid #c8e6c9;
+    }
+
+    .closing h2 {
+      font-size: 28px;
+      color: #1a4d2e;
+      margin-bottom: 16px;
+    }
+
+    .closing p {
+      font-size: 15px;
+      color: #555;
+      line-height: 2;
+    }
+
+    /* ===== FOOTER ===== */
+    .footer {
+      text-align: center;
+      padding: 40px 20px;
+      color: #999;
+      font-size: 12px;
+      border-top: 1px solid #e8f5e9;
+      margin-top: 40px;
+    }
+
+    .footer strong { color: #1a4d2e; }
+
+    /* ===== PRINT ===== */
+    @media print {
+      body { background: white; }
+      .cover { min-height: auto; padding: 60px 40px; page-break-after: always; }
+      .page { padding: 40px; }
+      .card { box-shadow: none; border: 1px solid #ddd; }
+      .stats .stat { background: #f8f8f8; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ========== COVER ========== -->
+<div class="cover">
+  <div class="cover-badge">GREEN COATINGS SOLUTION</div>
+  <h1>邁向永續的<br>綠色低碳塗料解決方案</h1>
+  <p class="cover-sub">Low VOC · Non-Toxic · Recyclable · PFAS Free</p>
+  <div class="cover-line"></div>
+  <div class="cover-tags">
+    <div class="cover-tag">🌿 水性環保</div>
+    
+    <div class="cover-tag">🔬 奈米長效</div>
+    <div class="cover-tag">♻️ 循環經濟</div>
+    <div class="cover-tag">🚫 無PFAS</div>
+  </div>
+</div>
+
+<!-- ========== PAGE 1: COMPANY INTRO ========== -->
+<div class="page">
+  <div class="page-label">COMPANY PROFILE</div>
+  <h2 class="page-title">關於國研化工</h2>
+  <p class="page-subtitle">專精特用化學品 ╳ 綠色塗料技術</p>
+
+  <div class="intro-box">
+    <p>面對全球淨零排放與永續法規的浪潮，國研化工積極從溶劑型塗料全面轉型為低碳、環保、健康導向的綠色塗料技術。我們專注於開發<strong>水性環保系統</strong>，從配方設計到量產應用，提供客戶完整的永續塗料解決方案。</p>
+  </div>
+
+  <!-- Key Numbers -->
+  <div class="stats">
+    <div class="stat">
+      <div class="stat-num">0</div>
+      <div class="stat-label">溶劑使用</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num"><50</div>
+      <div class="stat-label">g/L VOC排放</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">♻️</div>
+      <div class="stat-label">可回收配方</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">PFAS</div>
+      <div class="stat-label">完全不含</div>
+    </div>
+  </div>
+
+  <!-- Product Flow -->
+  <div style="text-align:center; margin: 50px 0;">
+    <div class="page-label" style="margin-bottom:30px;">CORE TECHNOLOGY FLOW</div>
+    <div class="flow">
+      <div class="flow-step"><span>🌿</span>生質原料</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step"><span>⚗️</span>低碳配方</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step"><span>♻️</span>循環回收</div>
+    </div>
+  </div>
+</div>
+
+<!-- ========== PAGE 2: TECHNOLOGY ========== -->
+<div class="page">
+  <div class="page-label">CORE TECHNOLOGY</div>
+  <h2 class="page-title">核心技術平台</h2>
+  <p class="page-subtitle">打造低碳、無毒、可循環的塗料生態系</p>
+
+  <div class="grid">
+<div class="card green">
+      <div class="card-icon">💧</div>
+      <h3>水性環保系統</h3>
+      <p>以水為主體溶劑，大幅降低VOC排放（<50g/L），保護室內空氣品質與施工者健康。具備快速乾燥、耐腐蝕特性。</p>
+    </div>
+    <div class="card">
+      <div class="card-icon">🌿</div>
+      <h3>生質材料應用</h3>
+      <p>採用生質原料與再生材料（如工業性植物油）替代石化原料，提升環保附加價值，降低碳排放強度，符合國際永續採購趨勢。</p>
+    </div>
+    <div class="card green">
+      <div class="card-icon">🔬</div>
+      <h3>奈米塗料技術</h3>
+      <p>國研奈米塗料研磨分散技術，帶來五大優勢：</p>
+      <ul style="font-size:13px; text-align:left; line-height:1.9; margin-top:8px; padding-left:18px;">
+        <li><strong>1. 顏料效率大幅提升</strong> — 顆粒越小，用越少顏料達到同樣遮蓋力，成本降低，環境負擔減少</li>
+        <li><strong>2. 塗層更滑順細緻</strong> — 奈米級顏料分布均勻，漆膜表面更平滑，光澤度、鮮豔度顯著提升</li>
+        <li><strong>3. 功能性大幅增強</strong> — 奈米粒子比表面積大，UV吸收劑效果更好，耐磨、耐腐蝕、抗刮性能同步提升</li>
+        <li><strong>4. 分散穩定性更好</strong> — 奈米分散液不易沉降、結塊，存放壽命長，塗裝時均勻性穩定</li>
+        <li><strong>5. 省料環保</strong> — 顏料用量減少、塗層可做更薄，符合水性環保趨勢</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ========== PAGE 3: REGULATORY ========== -->
+<div class="page">
+  <div class="page-label">REGULATORY COMPLIANCE</div>
+  <h2 class="page-title">接軌國際法規與品牌要求</h2>
+  <p class="page-subtitle">不只是合規，更是領先佈局</p>
+
+  <ul class="feature-list">
+    <li>
+      <span class="feature-check">✓</span>
+      <div><strong>歐盟永續產品生態設計規範（2024.07實施）</strong><br>
+        <span style="color:#666">要求產品具備耐用性、可重複使用性及可回收性。我們採用單一材質設計策略，大幅提升回收效率。</span></div>
+    </li>
+    <li>
+      <span class="feature-check">✓</span>
+      <div><strong>歐盟《PPWR 包裝廢棄物法規》</strong><br>
+        <span style="color:#666">響應減塑與循環經濟，配方朝可回收、無毒方向優化。</span></div>
+    </li>
+    <li>
+      <span class="feature-check">✓</span>
+      <div><strong>PFAS 全氟物質禁令</strong><br>
+        <span style="color:#666">全面採用無PFAS配方，符合歐美品牌大廠環保採購標準。</span></div>
+    </li>
+    <li>
+      <span class="feature-check">✓</span>
+      <div><strong>低VOC規範（各國環保法規）</strong><br>
+        <span style="color:#666">我國環保署及美國EPA對VOC均有嚴格限制，水性與粉末系統已領先達標。</span></div>
+    </li>
+  </ul>
+
+  <!-- Certifications -->
+  <div class="cert-grid">
+    <div class="cert-item">
+      <div class="cert-icon">🇪🇺</div>
+      REACH 合規
+    </div>
+    <div class="cert-item">
+      <div class="cert-icon">🇺🇸</div>
+      EPA VOC 標準
+    </div>
+    <div class="cert-item">
+      <div class="cert-icon">🌿</div>
+      生質原料認證
+    </div>
+  </div>
+</div>
+
+<!-- ========== PAGE 5: BRAND PARTNERS ========== -->
+<div class="page">
+  <div class="page-label">MARKET POSITION</div>
+
+  <div class="partner-section">
+    <h3>🌍 攜手國際品牌，共同推動永續供應鏈</h3>
+    <p>我們的技術已獲多家國際運動與消費品牌青睞，符合其嚴格的環保與功能標準</p>
+    <div class="partner-logos">
+      <div class="partner-logo">Nike</div>
+      <div class="partner-logo">Adidas</div>
+      <div class="partner-logo">New Balance</div>
+      <div class="partner-logo">Asics</div>
+      <div class="partner-logo">HOKA</div>
+    </div>
+    <div style="text-align:left; margin:16px 0 20px 0; line-height:2;">
+      <div>• <strong>奈米ZnO UV屏障</strong> — 吸收紫外線，防止龜裂退色，延長使用壽命</div>
+      <div>• <strong>奈米TiO₂光觸媒塗層</strong> — 自潔、抗菌、不改變皮革手感與外觀</div>
+      <div>• <strong>超疏水奈米紋理</strong> — 蓮花效應，水油滾落，70°C高溫不變黏</div>
+      <div>• <strong>氟碳奈米塗層</strong> — 抗風化、抗UV、抗污三合一，耐候達15年</div>
+      <div>• <strong>奈米矽烷偶合劑</strong> — 強化附著力，耐磨、耐水解、耐鹽霧</div>
+    </div>
+  </div>
+
+  <div style="background:#f8faf8; border-radius:16px; padding:32px 40px; margin:30px 0; border:1px solid #e8f5e9;">
+    <h3 style="color:#1a4d2e; font-size:18px; margin-bottom:16px;">💡 為什麼品牌選擇我們？</h3>
+    <ul class="feature-list" style="margin:0;">
+      <li><span class="feature-check">✓</span><span><strong>無溶劑配方</strong> — 針對製程中健康危害與環境污染</span></li>
+      <li><span class="feature-check">✓</span><span><strong>循環經濟相容</strong> — 可回收再利用，符合品牌永續承諾</span></li>
+      <li><span class="feature-check">✓</span><span><strong>無PFAS守則</strong> — 完全符合國際禁用物質規範</span></li>
+      <li><span class="feature-check">✓</span><span><strong>客製化開發</strong> — 配合品牌需求量身打造功能性配方</span></li>
+    </ul>
+  </div>
+</div>
+
+<!-- ========== CLOSING ========== -->
+<div class="page">
+  <div class="closing">
+    <h2>一起邁向永續未來</h2>
+    <p>國研化工從產品設計到終端應用，全流程落實低碳、環保、健康的理念。<br>
+      歡迎與我們進一步討論您的塗料需求，共同開發符合國際標準的綠色解決方案。</p>
+  </div>
+
+  
+</div>
+
+<div class="footer">
+  <p>© 2026 國研化工有限公司｜本文件僅供客戶參考使用</p>
+</div>
+
+</body>
+</html>
