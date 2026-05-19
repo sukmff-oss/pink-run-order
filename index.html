@@ -574,8 +574,9 @@ async function initLiff() {
             method: 'GET',
             signal: controller.signal
           });
+          let json = null;
           try {
-            const json = await redirectRes.json();
+            json = await redirectRes.json();
             orderSuccess = json.success;
             errDetail = json.error || '';
             if (!orderSuccess) {
