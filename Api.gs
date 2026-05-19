@@ -281,6 +281,30 @@ function makeCorsTextOutput(text) {
     .addHeader('Access-Control-Allow-Origin', '*');
 }
 
+function linePush(userId, text) {
+  if (!userId || userId === 'web_user' || !LINE_ACCESS_TOKEN) return;
+
+  const url = 'https://api.line.me/v2/bot/message/push';
+  const payload = {
+    to: userId,
+    messages: [{ type: 'text', text: text }]
+  };
+
+  try {
+    UrlFetchApp.fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + LINE_ACCESS_TOKEN
+      },
+      payload: JSON.stringify(payload),
+      muteHttpExceptions: true
+    });
+  } catch (err) {
+    console.error('[LINE_PUSH_ERROR]', err);
+  }
+}
+
 function linePushWithQuickReply(userId, text, quickReplyItems) {
   if (!userId || userId === 'web_user' || !LINE_ACCESS_TOKEN) return;
 
